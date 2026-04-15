@@ -7,6 +7,7 @@ A fast, multithreaded **port scanner with a graphical interface** built using Py
 ## Features
 
 * Simple GUI (Tkinter)
+* CLI version for terminal usage
 * Scan any IP address or domain
 * Custom port range input
 * Multithreaded scanning (fast performance)
@@ -24,7 +25,18 @@ A fast, multithreaded **port scanner with a graphical interface** built using Py
 ---
 
 ## How to Run
+* CLI:
 
+* .Clone the repository
+* .Run the script:
+
+```bash
+python port_scanner.py
+```
+
+---
+
+* GUI:
 1. Clone this repository:
 
 ```bash
