@@ -1,38 +1,66 @@
 import socket
 import threading
 import tkinter as tk
+
+BG="#0f1117"
+FG="#e2e4f0"
+Entry_BG="#12141f"
+ACTIVE_BG="#726bf2"
+ACCENT="#6c63ff"
+Muted="#8b8fa8"
+
 root=tk.Tk()
 root.title("Port Scanner")
-root.geometry("450x350")
+root.geometry("450x400")
+root.configure(bg=BG)
 root.configure(padx=15, pady=15)
 
 root.grid_columnconfigure(0, weight=1)
 root.grid_columnconfigure(1, weight=1)
 
-label=tk.Label(root, text="Target: ").grid(row=0, column=0, sticky="w", padx=5, pady=5)
-entry=tk.Entry(root, width=25)
-entry.grid(row=0, column=1, padx=5, pady=5)
+frame=tk.Frame(root, bg=BG)
+frame.grid_columnconfigure(0,weight=1)
+frame.grid(row=0, column=0,columnspan=2, sticky="ew", pady=10)
 
-label=tk.Label(root, text="Start Port: ").grid(row=1, column=0, sticky="w", padx=5, pady=5)
-entry2=tk.Entry(root, width=25)
-entry2.grid(row=1, column=1, padx=5, pady=5)
+title=tk.Label(frame, text="⬡ Port Scanner", bg=BG, fg=FG)
+title.pack(side="left")
 
-label=tk.Label(root, text="End Port: ").grid(row=2, column=0, sticky="w", padx=5, pady=5)
-entry3=tk.Entry(root, width=25)
-entry3.grid(row=2, column=1, padx=5, pady=5)
+status=tk.Label(frame, text="Idle •", bg=BG, fg=Muted)
+status.pack(side="right")
 
-scrollbar=tk.Scrollbar(root)
-output=tk.Text(root, height=10, width=45, yscrollcommand=scrollbar.set)
+
+tk.Label(root, text="Target: ", bg=BG, fg=FG).grid(row=1, column=0, sticky="w", padx=5, pady=5)
+entry=tk.Entry(root,bg=Entry_BG, fg=FG, insertbackground=FG)
+entry.grid(row=1, column=1, padx=5, pady=5)
+
+tk.Label(root, text="Start Port: ", bg=BG, fg=FG).grid(row=2, column=0, sticky="w", padx=5, pady=5)
+entry2=tk.Entry(root,bg=BG, fg=FG, insertbackground=FG)
+entry2.grid(row=2, column=1, padx=5, pady=5)
+
+tk.Label(root, text="End Port: ", bg=BG, fg=FG).grid(row=3, column=0, sticky="w", padx=5, pady=5)
+entry3=tk.Entry(root, bg=Entry_BG, fg=FG, insertbackground=FG)
+entry3.grid(row=3, column=1, padx=5, pady=5)
+
+scrollbar=tk.Scrollbar(
+    root,
+    bg=BG,
+    troughcolor=Entry_BG,
+    activebackground=ACCENT,
+)
+
+output=tk.Text(root,bg=Entry_BG, fg=FG, insertbackground=FG, height=10, width=45, yscrollcommand=scrollbar.set)
 scrollbar.config(command=output.yview)
 output.grid(row=5,column=0, columnspan=2,pady=10 )
 scrollbar.grid(row=5, column=2, sticky="ns")
 output.see(tk.END)
+open_ports=[]
 
 def start_scan():
     target = entry.get()
     start = int(entry2.get())
     end = int(entry3.get())
     ports = range(start, end+1)
+    open_ports.clear()
     output.config(state="normal")
     output.delete(1.0, tk.END)
     output.insert(tk.END, f"Scanning {target} from port {start} to {end}...\n")
@@ -42,7 +70,7 @@ def start_scan():
         t = threading.Thread(target=scan_port, args=(target, port))
         t.start()
         threads.append(t)
-button=tk.Button(root, text="Scan", width=20, command=start_scan)
+button=tk.Button(root, text="SCAN", bg=ACCENT, fg="white",font=("Arial", 10), relief="flat",bd=0,activebackground=ACTIVE_BG, cursor="hand2", width=20, command=start_scan)
 button.grid(row=4, column=0, columnspan=2, pady=10)
 
 def scan_port(target, port):
@@ -50,8 +78,10 @@ def scan_port(target, port):
     s.settimeout(2)
     result = s.connect_ex((target, port))
     if result == 0:
+       open_ports.append(port)
        output.insert(tk.END, f"{target}:{port} is open\n")
        output.see(tk.END)
+       output.insert(tk.END,f"Open ports found: {len(open_ports)}\n")
        output.config(state="disabled")
     s.close()
 
