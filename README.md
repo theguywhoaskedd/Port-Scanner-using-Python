@@ -5,7 +5,8 @@ A fast, multithreaded **port scanner with a graphical interface** built using Py
 ---
 # Screenshot
 
-<img width="556" height="534" alt="image" src="https://github.com/user-attachments/assets/95f3958d-932d-4e8d-9261-c91d3831eeb8" />
+<img width="561" height="534" alt="image" src="https://github.com/user-attachments/assets/65382598-1eb3-4d09-b373-d06a20104082" />
+
 
 
 ## Features
@@ -81,7 +82,8 @@ python port_scanner_gui.py
 
 ## Example Output
 
-<img width="556" height="534" alt="image" src="https://github.com/user-attachments/assets/55836349-0c89-4d91-9247-0afbe83669e7" />
+<img width="551" height="535" alt="image" src="https://github.com/user-attachments/assets/e13f96a8-7a35-4155-9e34-6149f91268a4" />
+
 
 
 ```
