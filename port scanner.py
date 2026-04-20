@@ -55,7 +55,13 @@ scrollbar.grid(row=5, column=2, sticky="ns")
 output.see(tk.END)
 open_ports=[]
 
+def run_scan():
+    start_scan()
+   
+
+
 def start_scan():
+    status.config(text="Scanning •", fg="green")
     target = entry.get()
     start = int(entry2.get())
     end = int(entry3.get())
@@ -70,7 +76,15 @@ def start_scan():
         t = threading.Thread(target=scan_port, args=(target, port))
         t.start()
         threads.append(t)
-button=tk.Button(root, text="SCAN", bg=ACCENT, fg="white",font=("Arial", 10), relief="flat",bd=0,activebackground=ACTIVE_BG, cursor="hand2", width=20, command=start_scan)
+    for t in threads:
+        t.join()
+    for port in open_ports:
+        output.insert(tk.END, f"{target}:{port} is open\n")
+        output.see(tk.END)
+    status.config(text=f"Done ({len(open_ports)} open)")
+    output.config(state="disabled")
+
+button=tk.Button(root, text="SCAN", bg=ACCENT, fg="white",font=("Arial", 10), relief="flat",bd=0,activebackground=ACTIVE_BG, cursor="hand2", width=20, command=lambda: threading.Thread(target=run_scan).start())
 button.grid(row=4, column=0, columnspan=2, pady=10)
 
 def scan_port(target, port):
@@ -79,10 +93,6 @@ def scan_port(target, port):
     result = s.connect_ex((target, port))
     if result == 0:
        open_ports.append(port)
-       output.insert(tk.END, f"{target}:{port} is open\n")
-       output.see(tk.END)
-       output.insert(tk.END,f"Open ports found: {len(open_ports)}\n")
-       output.config(state="disabled")
     s.close()
 
 root.mainloop()
