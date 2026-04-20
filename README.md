@@ -3,6 +3,10 @@
 A fast, multithreaded **port scanner with a graphical interface** built using Python.
 
 ---
+# Screenshot
+
+<img width="556" height="534" alt="image" src="https://github.com/user-attachments/assets/95f3958d-932d-4e8d-9261-c91d3831eeb8" />
+
 
 ## Features
 
@@ -76,6 +80,9 @@ python port_scanner_gui.py
 ---
 
 ## Example Output
+
+<img width="556" height="534" alt="image" src="https://github.com/user-attachments/assets/55836349-0c89-4d91-9247-0afbe83669e7" />
+
 
 ```
 Scanning google.com from port 22 to 100...
