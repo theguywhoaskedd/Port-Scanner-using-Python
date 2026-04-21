@@ -2,6 +2,8 @@ import socket
 import threading
 import tkinter as tk
 
+#color theme variables
+
 BG="#0f1117"
 FG="#e2e4f0"
 Entry_BG="#12141f"
@@ -9,24 +11,37 @@ ACTIVE_BG="#726bf2"
 ACCENT="#6c63ff"
 Muted="#8b8fa8"
 
+#create main window
 root=tk.Tk()
 root.title("Port Scanner")
 root.geometry("450x400")
+
+#adding padding 
 root.configure(bg=BG)
 root.configure(padx=15, pady=15)
 
+#congigure grid layout and columns to expand
 root.grid_columnconfigure(0, weight=1)
 root.grid_columnconfigure(1, weight=1)
 
+#header frame with title and status
 frame=tk.Frame(root, bg=BG)
+
+#allow streching 
 frame.grid_columnconfigure(0,weight=1)
+
+#place headers across both columns 
 frame.grid(row=0, column=0,columnspan=2, sticky="ew", pady=10)
 
+#title label left side
 title=tk.Label(frame, text="⬡ Port Scanner", bg=BG, fg=FG, font=("Segoe UI", 16, "bold"))
 title.pack(side="left")
 
+#status label right side
 status=tk.Label(frame, text="Idle •", font=("Segoe UI", 10), bg=BG, fg=Muted)
 status.pack(side="right")
+
+#Inputs 
 
 
 tk.Label(root, text="Target: ", bg=BG, fg=FG).grid(row=1, column=0, sticky="w", padx=5, pady=5)
@@ -54,13 +69,16 @@ scrollbar.config(command=output.yview)
 output.grid(row=5,column=0, columnspan=2,pady=10 )
 scrollbar.grid(row=5, column=2, sticky="ns")
 output.see(tk.END)
+
+#list to store open ports found during scan
 open_ports=[]
 
+#runs scan in different thread to avoid freezing the GUI
 def run_scan():
     start_scan()
    
 
-
+#the main scan function that updates the status and output
 def start_scan():
     status.config(text="Scanning •••", fg=ACCENT)
     target = entry.get()
@@ -90,12 +108,14 @@ button=tk.Button(root, text="SCAN", bg=ACCENT, fg="white",font=("Arial", 10),
      command=lambda: threading.Thread(target=run_scan).start())
 button.grid(row=4, column=0, columnspan=2, pady=12)
 
+#port scanning function that checks if a port is open and updates the open_ports list
 def scan_port(target, port):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.settimeout(2)
     result = s.connect_ex((target, port))
+    #if connection is successful > port is open
     if result == 0:
        open_ports.append(port)
     s.close()
-
+#start the gui loop
 root.mainloop()
